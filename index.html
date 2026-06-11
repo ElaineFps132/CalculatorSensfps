@@ -1,120 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, maximum-scale=1.0, user-scalable=no">
-  <title>Calculadora de Sensibilidad</title>
 
-  <!-- CSS integrado -->
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #0a0a0a;
-      color: #e0e0e0;
-      margin: 0;
-      padding: 15px;
-      line-height: 1.6;
-    }
-    h1 {
-      text-align: center;
-      color: #00f5c4;
-      text-shadow: 0 0 12px rgba(0, 245, 196, 0.5);
-      margin-bottom: 20px;
-    }
-    h2 { color: #00f5c4; margin: 25px 0 15px 0; }
-    .menu { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 25px; }
-    .menu button { background:#1a1a1a; color:#00f5c4; border:2px solid #00f5c4; padding:12px 18px; border-radius:8px; font-weight:bold; cursor:pointer; transition:0.3s; flex:1; min-width:110px; }
-    .menu button:hover { background:#00f5c4; color:#111; }
-    input, select { background:#161616; color:#e0e0e0; border:2px solid #00f5c4; border-radius:8px; padding:14px 12px; font-size:16px; width:100%; margin-bottom:12px; }
-    input:focus, select:focus { border-color:#00b8ff; box-shadow:0 0 0 3px rgba(0,184,255,0.3); outline:none; }
-    button { background:#00f5c4; color:#111; font-weight:bold; border:none; border-radius:8px; padding:14px; font-size:16px; cursor:pointer; transition:0.3s; width:100%; margin:10px 0; }
-    button:hover { background:#00e0b0; transform:translateY(-2px); }
-    .tab { background:#111; padding:20px; border-radius:12px; border:1px solid #00f5c433; margin-bottom:25px; display:none; }
-    .tab.active { display:block; }
-    .resultado { background:#1a1a1a; border:2px solid #00f5c4; border-radius:8px; padding:16px; margin-top:15px; font-weight:bold; }
-  </style>
-</head>
-<body>
-
-  <h1>Calculadora de Sensibilidad</h1>
-
-  <div class="menu">
-    <button onclick="mostrar('clasificacion')">Clasificación</button>
-    <button onclick="mostrar('inversa')">Cm → Sens</button>
-    <button onclick="mostrar('juegos')">Por Juego</button>
-    <button onclick="mostrar('pros')">Jugadores Conocidos</button>
-  </div>
-
-  <!-- Clasificación -->
-  <div id="clasificacion" class="tab active">
-    <h2>Clasificación de sensibilidad</h2>
-    <input type="number" id="cmInput" placeholder="Ingresa tu cm/360" step="0.01">
-    <p id="resultadoClasificacion" class="resultado"></p>
-  </div>
-
-  <!-- Cm → Sensibilidad -->
-  <div id="inversa" class="tab">
-    <h2>De cm/360 a Sensibilidad</h2>
-    <label>cm/360:</label>
-    <input type="number" id="cmReverse" placeholder="Ej: 30" step="0.01">
-    <label>DPI:</label>
-    <input type="number" id="dpiReverse" placeholder="Ej: 1600" value="1600">
-    <label>Juego:</label>
-    <select id="juegoReverse">
-      <option value="valorant">Valorant</option>
-      <option value="apex">Apex Legends</option>
-      <option value="blood">Blood Strike</option>
-      <option value="cs2">CS2</option>
-      <option value="fivem">FiveM</option>
-      <option value="r6">Rainbow Six</option>
-      <option value="rust">Rust</option>
-      <option value="paladins">Paladins</option>
-      <option value="overwatch">Overwatch</option>
-      <option value="re4">Resident Evil</option>
-    </select>
-    <button onclick="calcularSensibilidadInversa()">Calcular Sensibilidad</button>
-    <p id="resultadoSensInversa" class="resultado"></p>
-  </div>
-
-  <!-- Por Juego -->
-  <div id="juegos" class="tab">
-    <h2>Calcular cm/360 por juego</h2>
-    <label>Sensibilidad:</label>
-    <input type="number" id="sens" placeholder="Ej: 0.5" step="0.01">
-    <label>DPI:</label>
-    <input type="number" id="dpi" placeholder="Ej: 800">
-    <label>Juego:</label>
-    <select id="juego">
-      <option value="apex">Apex Legends</option>
-      <option value="blood">Blood Strike</option>
-      <option value="cs2">CS2</option>
-      <option value="fivem">FiveM</option>
-      <option value="r6">Rainbow Six</option>
-      <option value="rust">Rust</option>
-      <option value="valorant">Valorant</option>
-      <option value="paladins">Paladins</option>
-      <option value="overwatch">Overwatch</option>
-      <option value="re4">Resident Evil</option>
-    </select>
-    <p id="resultadoJuego" class="resultado"></p>
-  </div>
-
-  <!-- Jugadores Pros -->
-  <div id="pros" class="tab">
-    <h2>Jugadores Profesionales</h2>
-    <label>Selecciona el juego:</label>
-    <select id="juegoPros" onchange="cargarPros()">
-      <option value="valorant">Valorant</option>
-      <option value="cs2">CS2</option>
-      <option value="apex">Apex Legends</option>
-      <option value="blood">Blood Strike</option>
-      <option value="overwatch">Overwatch</option>
-    </select>
-    <div id="listaPros" style="margin-top: 25px;"></div>
-  </div>
-
-  <!-- JS integrado -->
-  <script>
 str<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -204,6 +90,361 @@ str<head>
 </body>
 </html>
 
-// SE REMOVIÓ LA FUNCIÓN INEXISTENTE AL FINAL DE ESTA LÍNEA
+<script>
+// ==================== ELEMENTOS ====================
+const cmInput = document.getElementById("cmInput");
+const sensInput = document.getElementById("sens");
+const dpiInput = document.getElementById("dpi");
+const juegoSelect = document.getElementById("juego");
 
-</script>
+const cmReverse = document.getElementById("cmReverse");
+const dpiReverse = document.getElementById("dpiReverse");
+const juegoReverse = document.getElementById("juegoReverse");
+const resultadoSensInversa = document.getElementById("resultadoSensInversa");
+
+// ==================== CAMBIAR PESTAÑA ====================
+function mostrar(tabId) {
+  document.querySelectorAll(".tab").forEach(tab => tab.classList.remove("active"));
+  document.getElementById(tabId).classList.add("active");
+
+  // Cargar jugadores pros automáticamente
+  if (tabId === "pros") {
+    setTimeout(cargarPros, 50);
+  }
+}
+
+// ==================== CLASIFICACIÓN ====================
+cmInput.addEventListener("input", clasificar);
+
+function clasificar() {
+  let cm360 = parseFloat(cmInput.value);
+  if (isNaN(cm360)) {
+    document.getElementById("resultadoClasificacion").innerText = "";
+    return;
+  }
+  let clasificacion = cm360 < 10 ? "Quaker" :
+                      cm360 < 15 ? "Super Alta" :
+                      cm360 < 30 ? "Alta" :
+                      cm360 < 40 ? "Media" : "Baja";
+  document.getElementById("resultadoClasificacion").innerText = 
+    `Tu sensibilidad de ${cm360} cm/360° se clasifica como: ${clasificacion}.`;
+}
+
+// ==================== CALCULADORA NORMAL ====================
+sensInput.addEventListener("input", calcular);
+dpiInput.addEventListener("input", calcular);
+juegoSelect.addEventListener("change", calcular);
+
+function calcular() {
+  let sens = parseFloat(sensInput.value);
+  let dpi = parseFloat(dpiInput.value);
+  let juego = juegoSelect.value;
+
+  if (isNaN(sens) || isNaN(dpi)) {
+    document.getElementById("resultadoJuego").innerText = "";
+    return;
+  }
+
+  let cm360;
+  switch(juego) {
+    case "apex": cm360 = 360 / (dpi * sens * 0.0087); break;
+    case "blood": cm360 = 360 / (dpi * sens * 0.0005639); break;
+    case "cs2": cm360 = (360 * 2.54) / (dpi * sens * 0.022); break;
+    case "fivem": cm360 = (-1.1667 * sens) + 10; break;
+    case "r6": cm360 = 360 / (dpi * sens * 0.0023); break;
+    case "rust": cm360 = 360 / (dpi * sens * 0.0443); break;
+    case "valorant": cm360 = (360 * 2.54) / (dpi * sens * 0.07); break;
+    case "paladins": cm360 = (360 * 2.54) / (dpi * sens * 0.00916); break;
+    case "overwatch": cm360 = 360 / (dpi * sens * 0.0026); break;
+    case "re4": cm360 = 360 / (dpi * sens * 0.001093145); break;
+    default: cm360 = 0;
+  }
+
+  document.getElementById("resultadoJuego").innerText = 
+    `Con ${sens} sens y ${dpi} DPI ≈ ${cm360.toFixed(2)} cm/360 en ${juego}`;
+}
+
+// ==================== CALCULADORA INVERSA ====================
+function calcularSensibilidadInversa() {
+  let cm360 = parseFloat(cmReverse.value);
+  let dpi = parseFloat(dpiReverse.value);
+  let juego = juegoReverse.value;
+
+  if (isNaN(cm360) || isNaN(dpi) || dpi <= 0) {
+    resultadoSensInversa.innerText = "Ingresa cm/360 y DPI válidos";
+    return;
+  }
+
+  let sens = 0;
+  switch(juego) {
+    case "valorant": sens = (360 * 2.54) / (dpi * cm360 * 0.07); break;
+    case "apex": sens = 360 / (dpi * cm360 * 0.0087); break;
+    case "blood": sens = 360 / (dpi * cm360 * 0.0005639); break;
+    case "cs2": sens = (360 * 2.54) / (dpi * cm360 * 0.022); break;
+    case "fivem": sens = (10 - cm360) / 1.1667; break;
+    case "r6": sens = 360 / (dpi * cm360 * 0.0023); break;
+    case "rust": sens = 360 / (dpi * cm360 * 0.0443); break;
+    case "paladins": sens = (360 * 2.54) / (dpi * cm360 * 0.00916); break;
+    case "overwatch": sens = 360 / (dpi * cm360 * 0.0026); break;
+    case "re4": sens = 360 / (dpi * cm360 * 0.001093145); break;
+  }
+
+  resultadoSensInversa.innerHTML = `
+    Para <strong>${cm360.toFixed(2)} cm/360</strong> con <strong>${dpi} DPI</strong> en <strong>${juego}</strong><br>
+    La sensibilidad es: <strong>${sens.toFixed(4)}</strong>
+  `;
+}
+
+// ==================== JUGADORES PROS ====================
+const jugadoresPros = {
+  valorant: [
+    { nombre: "TenZ",        equipo: "T1",          sens: 0.24, dpi: 1600 },
+    { nombre: "Demon1",      equipo: "NRG",         sens: 0.1, dpi: 1600 },
+    { nombre: "Aspas",       equipo: "MIBR",        sens: 0.37, dpi: 800 },
+    { nombre: "Florescent", equipo: "LFT",         sens: 0.175, dpi: 1600 },
+    { nombre: "F0rsaken",    equipo: "Paper Rex",   sens: 0.645, dpi: 800 },
+    { nombre: "Derke",       equipo: "Vitality",    sens: 0.28, dpi: 1600 },
+    { nombre: "Something",        equipo: "Paper Rex",   sens: 0.66, dpi: 800 },
+    { nombre: "Sinatraa", equipo: "Content Creator", sens: 0.384, dpi: 800 },
+    
+  ],
+  cs2: [
+    { nombre: "s1mple", equipo: "BC.Game",     sens: 3.09, dpi: 400 },
+    { nombre: "ZywOo",  equipo: "Vitality",    sens: 2.00, dpi: 400 },
+    { nombre: "donk",   equipo: "Spirit",      sens: 1.25, dpi: 400 },
+    { nombre: "M0nesy", equipo: "Falcons",     sens: 2.30, dpi: 400 }
+  ],
+  apex: [
+    { nombre: "ImperialHal", equipo: "Falcons Esport", sens: 1.1, dpi: 800 },
+    { nombre: "Genburten",   equipo: "100 Thieves", sens: 1.5, dpi: 800 }
+  ],
+  blood: [
+    {nombre: "Euren", equipo: "ERN", sens: 12, dpi: 1600 },
+    {nombre: "Phoenix", equipo: "PHX", sens: 22, dpi: 1600 },
+    {nombre: "Draykills", equipo: "LFT", sens: 20, dpi: 1600 },
+    {nombre: "Yuta", equipo: "Ozunu", sens: 18, dpi: 1600 },
+    {nombre: "AL33PZ", equipo: "NM", sens: 16, dpi: 1600 },
+    {nombre: "ESCRA", equipo: "NM", sens: 38, dpi: 850 },
+    {nombre: "Z3n", equipo: "offplayer", sens: 14, dpi: 1600 },
+    {nombre: "Akira", equipo: "Shy", sens: 12, dpi: 1600 },
+    {nombre: "Coesone", equipo: "Glizzy Gang", sens: 11,  dpi: 1600 },
+    {nombre: "RenzzoTV", equipo: "IDK", sens: 30, dpi: 800 },
+    {nombre: "Nicoo", equipo: "No Mercy", sens: 15, dpi: 1600 },
+  ],
+  overwatch: [
+    {nombre: "Sinatraa", equipo: "Content Creator", sens: 9, dpi: 800 },
+    {nombre: "Alvicatee", equipo: "Content Creator", sens: 5, dpi: 1600},
+    
+  ]
+};
+
+function calcularCm360(sens, dpi, juego) {
+  if (!sens || !dpi) return 0;
+  switch(juego) {
+    case "valorant": return (360 * 2.54) / (dpi * sens * 0.07);
+    case "cs2":      return (360 * 2.54) / (dpi * sens * 0.022);
+    case "apex":     return 360 / (dpi * sens * 0.0087);
+    case "blood": return 360 / (dpi* sens * 0.0005639);
+    case "re4": return 360 / (dpi* sens * 0.001093145);
+    case "overwatch": return 360 / (dpi* sens * 0.0026);
+    default: return 0;
+  }
+}
+
+function cargarPros() {
+  const juego = document.getElementById("juegoPros").value;
+  const contenedor = document.getElementById("listaPros");
+  contenedor.innerHTML = "";
+
+  if (!jugadoresPros[juego]) {
+    contenedor.innerHTML = "<p>No hay datos para este juego aún.</p>";
+    return;
+  }
+
+  let html = `<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px;">`;
+
+  jugadoresPros[juego].forEach(pro => {
+    let cm360 = calcularCm360(pro.sens, pro.dpi, juego);
+    html += `
+      <div style="background: #1a1a1a; padding: 15px; border-radius: 10px; border: 1px solid #00f5c4;">
+        <h3>${pro.nombre} <small style="color:#00b8ff">(${pro.equipo})</small></h3>
+        <p><strong>Sens:</strong> ${pro.sens} | <strong>DPI:</strong> ${pro.dpi}</p>
+        <p><strong>cm/360:</strong> ≈ ${cm360.toFixed(2)}</p>
+        <button onclick="usarSensPro(${pro.sens}, ${pro.dpi}, '${juego}')" style="width:100%; margin-top:8px; background:#00f5c4; color:#111; border:none; padding:10px; border-radius:6px; cursor:pointer;">
+          Usar esta sensibilidad
+        </button>
+      </div>`;
+  });
+
+  html += `</div>`;
+  contenedor.innerHTML = html;
+}
+
+function usarSensPro(sens, dpi, juego) {
+  navigator.clipboard.writeText(sens.toString()).then(() => {
+    const mensaje = document.createElement("div");
+    mensaje.textContent = `✅ Copiado: ${sens}`;
+    mensaje.style.cssText = `
+      position: fixed; 
+      bottom: 30px; 
+      left: 50%; 
+      transform: translateX(-50%);
+      background: #00f5c4; 
+      color: #111; 
+      padding: 14px 22px; 
+      border-radius: 8px; 
+      font-weight: bold;
+      z-index: 10000;
+      box-shadow: 0 5px 20px rgba(0, 245, 196, 0.5);
+      transition: all 0.4s;
+    `;
+    document.body.appendChild(mensaje);
+    setTimeout(() => {
+      mensaje.style.opacity = "0";
+      setTimeout(() => mensaje.remove(), 600);
+    }, 1800);
+  }).catch(() => {
+    alert(`Copiado: ${sens}`);
+  });
+}
+
+  </script>
+
+<style>
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #0a0a0a;
+  color: #e0e0e0;
+  margin: 0;
+  padding: 15px;
+  line-height: 1.6;
+}
+
+h1 {
+  text-align: center;
+  color: #00f5c4;
+  text-shadow: 0 0 12px rgba(0, 245, 196, 0.5);
+  margin-bottom: 20px;
+}
+
+h2 {
+  color: #00f5c4;
+  margin: 25px 0 15px 0;
+}
+
+/* Menú */
+.menu {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 25px;
+  justify-content: center;
+}
+
+.menu button {
+  background-color: #1a1a1a;
+  color: #00f5c4;
+  border: 2px solid #00f5c4;
+  padding: 12px 18px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+  flex: 1;
+  min-width: 110px;
+}
+
+.menu button:hover {
+  background-color: #00f5c4;
+  color: #111;
+}
+
+/* Inputs y Select */
+input, select {
+  background-color: #161616;
+  color: #e0e0e0;
+  border: 2px solid #00f5c4;
+  border-radius: 8px;
+  padding: 14px 12px;
+  font-size: 16px;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 12px;
+}
+
+input:focus, select:focus {
+  border-color: #00b8ff;
+  box-shadow: 0 0 0 3px rgba(0, 184, 255, 0.3);
+  outline: none;
+}
+
+/* Botones */
+button {
+  background-color: #00f5c4;
+  color: #111;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  padding: 14px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s;
+  width: 100%;
+  margin: 10px 0;
+}
+
+button:hover {
+  background-color: #00e0b0;
+  transform: translateY(-2px);
+}
+
+/* Contenedores */
+.tab {
+  background-color: #111111;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #00f5c433;
+  margin-bottom: 25px;
+  display: none;
+}
+
+.tab.active {
+  display: block;
+}
+
+.resultado {
+  background-color: #1a1a1a;
+  border: 2px solid #00f5c4;
+  border-radius: 8px;
+  padding: 16px;
+  margin-top: 15px;
+  font-weight: bold;
+}
+
+/* Tabla */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+  background-color: #161616;
+}
+
+th, td {
+  padding: 14px 8px;
+  text-align: center;
+  border-bottom: 1px solid #00f5c455;
+}
+
+th {
+  background-color: #1f1f1f;
+  color: #00f5c4;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  body { padding: 12px; }
+  .tab { padding: 18px 15px; }
+}
+  
+</style>
