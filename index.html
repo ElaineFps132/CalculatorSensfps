@@ -274,10 +274,12 @@ function cargarPros() {
 
 jugadoresPros[juego].forEach(pro => {
   let extraInfo = "";
+  let copyValue = "";
 
   if (pro.codigo) {
     // Caso Mobile → mostrar código
-    extraInfo = `<p><strong>Code Sens:</strong> ${pro.codigo}</p>`;
+    extraInfo = `<p><strong>Código de sensibilidad:</strong> ${pro.codigo}</p>`;
+    copyValue = pro.codigo; // lo que se copiará
   } else {
     // Caso PC → mostrar sens/dpi/cm360
     let cm360 = calcularCm360(pro.sens, pro.dpi, juego);
@@ -285,24 +287,30 @@ jugadoresPros[juego].forEach(pro => {
       <p><strong>Sens:</strong> ${pro.sens} | <strong>DPI:</strong> ${pro.dpi}</p>
       <p><strong>cm/360:</strong> ≈ ${cm360.toFixed(2)}</p>
     `;
+    copyValue = pro.sens; // lo que se copiará
   }
 
   html += `
     <div style="background:#1a1a1a; padding:15px; border-radius:10px; border:1px solid #00f5c4;">
       <h3>${pro.nombre} <small style="color:#00b8ff">(${pro.equipo})</small></h3>
       ${extraInfo}
+      <button onclick="usarSensPro('${copyValue}')" 
+        style="width:100%; margin-top:8px; background:#00f5c4; color:#111; border:none; padding:10px; border-radius:6px; cursor:pointer;">
+        Copiar valor
+      </button>
     </div>`;
 });
+
 
 
   html += `</div>`;
   contenedor.innerHTML = html;
 }
 
-function usarSensPro(sens, dpi, juego) {
-  navigator.clipboard.writeText(sens.toString()).then(() => {
+function usarSensPro(valor) {
+  navigator.clipboard.writeText(valor.toString()).then(() => {
     const mensaje = document.createElement("div");
-    mensaje.textContent = `✅ Copiado: ${sens}`;
+    mensaje.textContent = `✅ Copiado: ${valor}`;
     mensaje.style.cssText = `
       position: fixed; 
       bottom: 30px; 
@@ -323,9 +331,10 @@ function usarSensPro(sens, dpi, juego) {
       setTimeout(() => mensaje.remove(), 600);
     }, 1800);
   }).catch(() => {
-    alert(`Copiado: ${sens}`);
+    alert(`Copiado: ${valor}`);
   });
 }
+
 
 
   </script>
