@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 
-str<head>
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Calculadora de Sensibilidad</title>
@@ -67,6 +67,7 @@ str<head>
             <option value="paladins">Paladins</option>
             <option value="overwatch">Overwatch</option>
             <option value="re4">Resident Evil</option>
+          
         </select>
         <p id="resultadoJuego" class="resultado"></p>
     </div>
@@ -81,7 +82,7 @@ str<head>
             <option value="apex">Apex Legends</option>
             <option value="blood">Blood Strike</option>
           <option value="overwatch">Overwatch</option>
-          
+          <option value="bloodm">Blood strike Mobile</option>
         </select>
         <div id="listaPros" style="margin-top: 25px;"></div>
     </div>
@@ -89,6 +90,7 @@ str<head>
     <script src="script.js"></script>
 </body>
 </html>
+
 
 <script>
 // ==================== ELEMENTOS ====================
@@ -218,8 +220,8 @@ const jugadoresPros = {
     { nombre: "ImperialHal", equipo: "Falcons Esport", sens: 1.1, dpi: 800 },
     { nombre: "Genburten",   equipo: "100 Thieves", sens: 1.5, dpi: 800 }
   ],
-  blood: [
-    {nombre: "Euren", equipo: "ERN", sens: 12, dpi: 1600 },
+   blood: [
+    {nombre: "Euren", equipo: "ERN", sens: 19, dpi: 1200 },
     {nombre: "Phoenix", equipo: "PHX", sens: 22, dpi: 1600 },
     {nombre: "Draykills", equipo: "LFT", sens: 20, dpi: 1600 },
     {nombre: "Yuta", equipo: "Ozunu", sens: 18, dpi: 1600 },
@@ -230,12 +232,19 @@ const jugadoresPros = {
     {nombre: "Coesone", equipo: "Glizzy Gang", sens: 11,  dpi: 1600 },
     {nombre: "RenzzoTV", equipo: "IDK", sens: 30, dpi: 800 },
     {nombre: "Nicoo", equipo: "No Mercy", sens: 15, dpi: 1600 },
-  ],
+    {nombre: "ElaineFps", equipo: "Little Pony", sens: 25, dpi: 3200},
+    {nombre: ""}
+       ],
   overwatch: [
     {nombre: "Sinatraa", equipo: "Content Creator", sens: 9, dpi: 800 },
     {nombre: "Alvicatee", equipo: "Content Creator", sens: 5, dpi: 1600},
     
-  ]
+  ],
+    
+        bloodm: [
+            {nombre: "Garc1", equipo: "AR", codigo: "NA/SA-SENS-AXtSzmMWwQIAR6RE-2-4" }
+        
+    ]
 };
 
 function calcularCm360(sens, dpi, juego) {
@@ -263,18 +272,28 @@ function cargarPros() {
 
   let html = `<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px;">`;
 
-  jugadoresPros[juego].forEach(pro => {
+jugadoresPros[juego].forEach(pro => {
+  let extraInfo = "";
+
+  if (pro.codigo) {
+    // Caso Mobile → mostrar código
+    extraInfo = `<p><strong>Code Sens:</strong> ${pro.codigo}</p>`;
+  } else {
+    // Caso PC → mostrar sens/dpi/cm360
     let cm360 = calcularCm360(pro.sens, pro.dpi, juego);
-    html += `
-      <div style="background: #1a1a1a; padding: 15px; border-radius: 10px; border: 1px solid #00f5c4;">
-        <h3>${pro.nombre} <small style="color:#00b8ff">(${pro.equipo})</small></h3>
-        <p><strong>Sens:</strong> ${pro.sens} | <strong>DPI:</strong> ${pro.dpi}</p>
-        <p><strong>cm/360:</strong> ≈ ${cm360.toFixed(2)}</p>
-        <button onclick="usarSensPro(${pro.sens}, ${pro.dpi}, '${juego}')" style="width:100%; margin-top:8px; background:#00f5c4; color:#111; border:none; padding:10px; border-radius:6px; cursor:pointer;">
-          Usar esta sensibilidad
-        </button>
-      </div>`;
-  });
+    extraInfo = `
+      <p><strong>Sens:</strong> ${pro.sens} | <strong>DPI:</strong> ${pro.dpi}</p>
+      <p><strong>cm/360:</strong> ≈ ${cm360.toFixed(2)}</p>
+    `;
+  }
+
+  html += `
+    <div style="background:#1a1a1a; padding:15px; border-radius:10px; border:1px solid #00f5c4;">
+      <h3>${pro.nombre} <small style="color:#00b8ff">(${pro.equipo})</small></h3>
+      ${extraInfo}
+    </div>`;
+});
+
 
   html += `</div>`;
   contenedor.innerHTML = html;
@@ -307,6 +326,7 @@ function usarSensPro(sens, dpi, juego) {
     alert(`Copiado: ${sens}`);
   });
 }
+
 
   </script>
 
