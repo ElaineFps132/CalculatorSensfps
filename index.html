@@ -279,36 +279,37 @@ function cargarPros() {
 
   let html = `<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px;">`;
 
-jugadoresPros[juego].forEach(pro => {
-  let extraInfo = "";
-  let copyValue = "";
+  jugadoresPros[juego].forEach(pro => {
+    let extraInfo = "";
+    let copyValue = pro.codigo || pro.sens || "";
 
-  if (pro.codigo) {
-    // Caso Mobile → mostrar código
-    extraInfo = `<p><strong>Código de sensibilidad:</strong> ${pro.codigo}</p>`;
-    copyValue = pro.codigo; // lo que se copiará
-  } else {
-    // Caso PC → mostrar sens/dpi/cm360
-    let cm360 = calcularCm360(pro.sens, pro.dpi, juego);
-    extraInfo = `
-      <p><strong>Sens:</strong> ${pro.sens} | <strong>DPI:</strong> ${pro.dpi}</p>
-      <p><strong>cm/360:</strong> ≈ ${cm360.toFixed(2)}</p>
-    `;
-    copyValue = pro.sens; // lo que se copiará
-  }
+    // ==================== ElaineFPS y casos mixtos ====================
+    if (pro.codigo) {
+      extraInfo += `<p><strong>Código de sensibilidad:</strong> ${pro.codigo}</p>`;
+    }
 
-  html += `
-    <div style="background:#1a1a1a; padding:15px; border-radius:10px; border:1px solid #00f5c4;">
-      <h3>${pro.nombre} <small style="color:#00b8ff">(${pro.equipo})</small></h3>
-      ${extraInfo}
-      <button onclick="usarSensPro('${copyValue}')" 
-        style="width:100%; margin-top:8px; background:#00f5c4; color:#111; border:none; padding:10px; border-radius:6px; cursor:pointer;">
-        Copiar valor
-      </button>
-    </div>`;
-});
+    // Mostrar DPI + Sens + cm/360 cuando corresponda
+    if (pro.sens && pro.dpi) {
+      let cm360 = calcularCm360(pro.sens, pro.dpi, juego);
+      extraInfo += `
+        <p><strong>Sens:</strong> ${pro.sens} | <strong>DPI:</strong> ${pro.dpi}</p>
+        <p><strong>cm/360:</strong> ≈ ${cm360.toFixed(2)}</p>
+      `;
+    } 
+    else if (pro.dpi) {
+      extraInfo += `<p><strong>DPI:</strong> ${pro.dpi}</p>`;
+    }
 
-
+    html += `
+      <div style="background:#1a1a1a; padding:15px; border-radius:10px; border:1px solid #00f5c4;">
+        <h3>${pro.nombre} <small style="color:#00b8ff">(${pro.equipo})</small></h3>
+        ${extraInfo}
+        <button onclick="usarSensPro('${copyValue}')" 
+          style="width:100%; margin-top:8px; background:#00f5c4; color:#111; border:none; padding:10px; border-radius:6px; cursor:pointer;">
+          ${pro.codigo ? 'Copiar Código' : 'Copiar Sens'}
+        </button>
+      </div>`;
+  });
 
   html += `</div>`;
   contenedor.innerHTML = html;
